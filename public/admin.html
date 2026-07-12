@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press Kit — Panel</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div class="topbar no-print">
+  <div class="topbar-inner">
+    <div class="brand">Press Kit Panel</div>
+    <nav>
+      <a href="/" target="_blank">Görüntüle ↗</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="admin-toolbar" style="margin-bottom:24px;">
+    <button class="btn btn-primary" id="saveBtn">Kaydet</button>
+    <button class="btn" id="exportBtn">JSON Dışa Aktar</button>
+    <button class="btn" id="importBtn">JSON İçe Aktar</button>
+    <input type="file" id="importFile" accept="application/json" style="display:none">
+    <a class="btn" id="zipBtn" href="/api/download-zip">📦 Zip İndir</a>
+    <div class="spacer"></div>
+    <span id="dirtyBadge" class="dirty-badge">● Kaydedilmemiş değişiklikler var</span>
+    <span id="loadState" class="empty-note"></span>
+  </div>
+
+  <!-- OYUN -->
+  <div class="admin-section">
+    <h2>Oyun</h2>
+    <div class="field">
+      <label>Oyun Adı</label>
+      <input type="text" id="f-title" placeholder="örn. Ruffy and the Riverside">
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Tagline (TR)</label>
+        <input type="text" id="f-tagline-tr" placeholder="örn. Çevrendeki dünyayı kopyala &amp; yapıştır">
+      </div>
+      <div class="field">
+        <label>Tagline (EN)</label>
+        <input type="text" id="f-tagline-en" placeholder="e.g. Copy &amp; Paste the world around you">
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Box Art</label>
+        <div class="upload-row">
+          <input type="file" id="f-boxArt-file" accept="image/*">
+        </div>
+        <img class="thumb-preview" id="f-boxArt-preview">
+      </div>
+      <div class="field">
+        <label>Key Art (hero arka planı)</label>
+        <div class="upload-row">
+          <input type="file" id="f-keyArt-file" accept="image/*">
+        </div>
+        <img class="thumb-preview" id="f-keyArt-preview">
+      </div>
+    </div>
+  </div>
+
+  <!-- DETAYLAR -->
+  <div class="admin-section">
+    <h2>Oyun Detayları</h2>
+    <div class="row-2">
+      <div class="field">
+        <label>Geliştirici</label>
+        <input type="text" id="f-developer">
+      </div>
+      <div class="field">
+        <label>Yayıncı</label>
+        <input type="text" id="f-publisher">
+      </div>
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>Tür / Genre (TR)</label>
+        <input type="text" id="f-genre-tr" placeholder="örn. El Çizimi | Aksiyon Macera | Platform">
+      </div>
+      <div class="field">
+        <label>Tür / Genre (EN)</label>
+        <input type="text" id="f-genre-en" placeholder="e.g. Hand-Drawn | Action Adventure | Platformer">
+      </div>
+    </div>
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Platformlar &amp; Çıkış Tarihleri</label>
+    <div id="platformsList"></div>
+    <button class="btn btn-sm add-btn" data-add="platform">+ Platform Ekle</button>
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Sosyal Medya Linkleri</label>
+    <div id="socialList"></div>
+    <button class="btn btn-sm add-btn" data-add="social">+ Sosyal Medya Ekle</button>
+  </div>
+
+  <!-- HAKKINDA -->
+  <div class="admin-section">
+    <h2>Oyun Hakkında</h2>
+    <div class="row-2">
+      <div class="field">
+        <label>Açıklama (TR)</label>
+        <textarea id="f-description-tr" rows="6"></textarea>
+      </div>
+      <div class="field">
+        <label>Açıklama (EN)</label>
+        <textarea id="f-description-en" rows="6"></textarea>
+      </div>
+    </div>
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Öne Çıkan Özellikler</label>
+    <div id="featuresList"></div>
+    <button class="btn btn-sm add-btn" data-add="feature">+ Özellik Ekle</button>
+  </div>
+
+  <!-- İLETİŞİM -->
+  <div class="admin-section">
+    <h2>İletişim</h2>
+    <div id="contactsList"></div>
+    <button class="btn btn-sm add-btn" data-add="contact">+ İletişim Ekle</button>
+  </div>
+
+  <!-- VİDEOLAR -->
+  <div class="admin-section">
+    <h2>Videolar</h2>
+    <div class="field">
+      <label>Tüm videoları indirme linki (opsiyonel — örn. Google Drive klasörü)</label>
+      <input type="url" id="f-videosDownload" placeholder="https://drive.google.com/...">
+    </div>
+    <div id="videosList"></div>
+    <button class="btn btn-sm add-btn" data-add="video">+ Video Ekle</button>
+  </div>
+
+  <!-- GÖRSELLER -->
+  <div class="admin-section">
+    <h2>Görseller</h2>
+    <div class="field">
+      <label>Tüm görselleri indirme linki (opsiyonel)</label>
+      <input type="url" id="f-imagesDownload" placeholder="https://drive.google.com/...">
+    </div>
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Logo</label>
+    <div class="upload-row">
+      <input type="file" id="f-logo-file" accept="image/*">
+    </div>
+    <img class="thumb-preview" id="f-logo-preview">
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Artwork</label>
+    <div class="upload-row bulk-upload-row">
+      <input type="file" id="bulk-artwork" accept="image/*" multiple>
+      <span class="bulk-hint">Birden fazla dosya seçip toplu ekleyebilirsin</span>
+    </div>
+    <div id="artworkList"></div>
+    <button class="btn btn-sm add-btn" data-add="artwork">+ Artwork Ekle</button>
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Ekran Görüntüleri</label>
+    <div class="upload-row bulk-upload-row">
+      <input type="file" id="bulk-screenshots" accept="image/*" multiple>
+      <span class="bulk-hint">Birden fazla dosya seçip toplu ekleyebilirsin</span>
+    </div>
+    <div id="screenshotsList"></div>
+    <button class="btn btn-sm add-btn" data-add="screenshots">+ Ekran Görüntüsü Ekle</button>
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">GIF'ler</label>
+    <div class="upload-row bulk-upload-row">
+      <input type="file" id="bulk-gifs" accept="image/*" multiple>
+      <span class="bulk-hint">Birden fazla dosya seçip toplu ekleyebilirsin</span>
+    </div>
+    <div id="gifsList"></div>
+    <button class="btn btn-sm add-btn" data-add="gifs">+ GIF Ekle</button>
+
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Ek Görseller (Thumbnail vb.)</label>
+    <div class="upload-row bulk-upload-row">
+      <input type="file" id="bulk-assets" accept="image/*" multiple>
+      <span class="bulk-hint">Birden fazla dosya seçip toplu ekleyebilirsin</span>
+    </div>
+    <div id="assetsList"></div>
+    <button class="btn btn-sm add-btn" data-add="assets">+ Görsel Ekle</button>
+  </div>
+
+  <!-- BASIN BÜLTENLERİ -->
+  <div class="admin-section">
+    <h2>Basın Bültenleri</h2>
+    <div id="pressList"></div>
+    <button class="btn btn-sm add-btn" data-add="press">+ Basın Bülteni Ekle</button>
+  </div>
+
+  <div class="admin-toolbar">
+    <button class="btn btn-primary" id="saveBtn2">Kaydet</button>
+    <div class="spacer"></div>
+  </div>
+
+</div>
+
+<div class="status-bar" id="statusBar"></div>
+
+<script src="/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+{
+  "game": {
+    "title": "Cozy Corner Cafe",
+    "tagline": {
+      "tr": "",
+      "en": ""
+    },
+    "boxArt": "/uploads/e1ae0147c560f2e9.jpeg",
+    "keyArt": ""
+  },
+  "details": {
+    "developer": "",
+    "publisher": "",
+    "genre": {
+      "tr": "",
+      "en": ""
+    },
+    "platforms": [
+      {
+        "name": "Steam",
+        "releaseDate": {
+          "tr": "1 kasım 2026",
+          "en": "november 1 2026"
+        }
+      },
+      {
+        "name": "",
+        "releaseDate": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ],
+    "socialLinks": [
+      {
+        "label": "",
+        "url": ""
+      }
+    ]
+  },
+  "about": {
+    "description": {
+      "tr": "",
+      "en": ""
+    },
+    "keyFeatures": [
+      {
+        "tr": "",
+        "en": ""
+      }
+    ]
+  },
+  "contacts": [
+    {
+      "role": "PR",
+      "name": "",
+      "email": ""
+    },
+    {
+      "role": "Publisher",
+      "name": "",
+      "email": ""
+    },
+    {
+      "role": "Developer",
+      "name": "",
+      "email": ""
+    }
+  ],
+  "videos": {
+    "downloadLink": "",
+    "items": [
+      {
+        "title": {
+          "tr": "",
+          "en": ""
+        },
+        "url": ""
+      }
+    ]
+  },
+  "images": {
+    "downloadLink": "",
+    "logo": "",
+    "artwork": [],
+    "screenshots": [
+      {
+        "url": "",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ],
+    "gifs": [
+      {
+        "url": "",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ],
+    "additionalAssets": [
+      {
+        "url": "",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ]
+  },
+  "pressReleases": [
+    {
+      "title": "",
+      "url": "",
+      "date": ""
+    }
+  ]
+}
