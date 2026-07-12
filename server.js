@@ -108,8 +108,10 @@ function migrateData(data) {
   data.details.genre = toBilingual(data.details.genre);
   data.details.platforms = (data.details.platforms || []).map(p => ({
     name: (p && p.name) || '',
+    url: (p && p.url) || '',
     releaseDate: toBilingual(p && p.releaseDate)
   }));
+  data.about.pitch = toBilingual(data.about.pitch);
   data.about.description = toBilingual(data.about.description);
   data.about.keyFeatures = (data.about.keyFeatures || []).map(f => toBilingual(f));
   data.videos.items = (data.videos.items || []).map(v => ({

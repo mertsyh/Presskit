@@ -3,8 +3,9 @@
     tr: {
       'nav.zip': 'Zip olarak indir',
       'nav.pdf': 'PDF olarak indir',
-      'section.gameinfo': 'Oyun Bilgileri',
-      'section.about': 'Oyun Hakkında',
+      'section.factsheet': 'Factsheet',
+      'section.pitch': 'Pitch',
+      'section.description': 'Açıklama',
       'section.features': 'Öne Çıkan Özellikler',
       'section.contacts': 'İletişim',
       'section.videos': 'Videolar',
@@ -18,20 +19,19 @@
       'link.videosdownload': 'Tüm videoları indir',
       'link.imagesdownload': 'Tüm görselleri indir',
       'empty.about': 'Henüz içerik girilmedi.',
-      'kv.developer': 'Geliştirici',
-      'kv.publisher': 'Yayıncı',
       'kv.genre': 'Tür',
-      'kv.platform': 'Platform',
-      'heading.platforms': 'Platformlar & Çıkış Tarihleri',
+      'heading.platforms': 'Platform',
       'heading.social': 'Sosyal Medya',
       'video.open': 'Videoyu Aç',
-      'quickfacts.release': 'Çıkış'
+      'wishlist.steam': "Steam'de İstek Listesine Ekle",
+      'label.by': 'Yapımcı:'
     },
     en: {
       'nav.zip': 'Download zip',
       'nav.pdf': 'Download as PDF',
-      'section.gameinfo': 'Game Info',
-      'section.about': 'About',
+      'section.factsheet': 'Factsheet',
+      'section.pitch': 'Pitch',
+      'section.description': 'Description',
       'section.features': 'Key Features',
       'section.contacts': 'Contact',
       'section.videos': 'Videos',
@@ -45,16 +45,40 @@
       'link.videosdownload': 'Download all videos',
       'link.imagesdownload': 'Download all images',
       'empty.about': 'No content yet.',
-      'kv.developer': 'Developer',
-      'kv.publisher': 'Publisher',
       'kv.genre': 'Genre',
-      'kv.platform': 'Platform',
-      'heading.platforms': 'Platforms & Release Dates',
+      'heading.platforms': 'Platform',
       'heading.social': 'Social Media',
       'video.open': 'Open Video',
-      'quickfacts.release': 'Release'
+      'wishlist.steam': 'Wishlist on Steam',
+      'label.by': 'By'
     }
   };
+
+  // ---------- inline brand icons (decorative, paired with a text label) ----------
+  const ICONS = {
+    steam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9.5"/><circle cx="8.7" cy="15.3" r="2.3" fill="currentColor" stroke="none"/><circle cx="15.3" cy="8.3" r="2" fill="currentColor" stroke="none"/><line x1="8.7" y1="15.3" x2="14" y2="10"/></svg>',
+    twitter: '<svg viewBox="0 0 24 24"><path d="M4 4l16 16M20 4L4 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>',
+    tiktok: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M15 3c.3 2.2 1.8 4 4 4.3V10c-1.5 0-2.9-.5-4-1.3V15a5 5 0 1 1-5-5c.3 0 .7 0 1 .1v2.6a2.4 2.4 0 1 0 1.7 2.3V3H15z"/></svg>',
+    bluesky: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 8.2C10.4 5.4 7.2 3 5.3 3.7c-1 3 .8 6 2.8 7-2 .4-3.4 2-2.9 3.9 1.9 2 5.3 1 6.8-1.3 1.5 2.3 4.9 3.3 6.8 1.3.5-1.9-.9-3.5-2.9-3.9 2-1 3.8-4 2.8-7-1.9-.7-5.1 1.7-6.7 4.5z"/></svg>',
+    instagram: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 8.5l6 3.5-6 3.5z" fill="currentColor"/></svg>',
+    discord: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5C6 6 4.5 8 4 11c-.6 3-.5 6 1 7.5.7.5 1.6.3 2.2-.4l.8-1c1.2.4 2.5.6 4 .6s2.8-.2 4-.6l.8 1c.6.7 1.5.9 2.2.4 1.5-1.5 1.6-4.5 1-7.5-.5-3-2-5-4-5.5-1 .6-1 1-1 1-1-.2-2-.3-3-.3s-2 .1-3 .3c0 0 0-.4-1-1zM9 13a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6zm6 0a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6z"/></svg>',
+    website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9z"/></svg>'
+  };
+
+  function detectSocialBrand(url) {
+    try {
+      const u = new URL(url, window.location.origin);
+      const host = u.hostname.replace(/^www\./, '').toLowerCase();
+      if (host === 'twitter.com' || host === 'x.com') return { brand: 'twitter', label: 'Twitter' };
+      if (host === 'tiktok.com') return { brand: 'tiktok', label: 'TikTok' };
+      if (host === 'bsky.app') return { brand: 'bluesky', label: 'Bluesky' };
+      if (host === 'instagram.com') return { brand: 'instagram', label: 'Instagram' };
+      if (host === 'youtube.com' || host === 'youtu.be') return { brand: 'youtube', label: 'YouTube' };
+      if (host === 'discord.gg' || host === 'discord.com') return { brand: 'discord', label: 'Discord' };
+    } catch (e) { /* ignore, fall through */ }
+    return { brand: 'website', label: null };
+  }
 
   function esc(s) {
     if (s == null) return '';
@@ -214,27 +238,6 @@
     });
   }
 
-  function renderQuickFacts(details, lang) {
-    const el = document.getElementById('quickFacts');
-    const items = [];
-    if (details.developer) items.push({ label: t('kv.developer'), value: details.developer });
-    if (details.publisher) items.push({ label: t('kv.publisher'), value: details.publisher });
-    const genre = pick(details.genre, lang);
-    if (genre) items.push({ label: t('kv.genre'), value: genre });
-    const platforms = (details.platforms || []).filter(p => p && p.name);
-    if (platforms.length) {
-      items.push({ label: t('kv.platform'), value: platforms.map(p => p.name).join(', ') });
-      const firstDate = platforms.map(p => pick(p.releaseDate, lang)).find(d => d);
-      if (firstDate) items.push({ label: t('quickfacts.release'), value: firstDate });
-    }
-    if (!items.length) {
-      el.style.display = 'none';
-      return;
-    }
-    el.style.display = '';
-    el.innerHTML = items.map(i => `<div class="qf-item"><span class="qf-label">${esc(i.label)}</span><span class="qf-value">${esc(i.value)}</span></div>`).join('');
-  }
-
   function waitForImages() {
     const imgs = Array.from(document.querySelectorAll('img'));
     const pending = imgs.filter(img => !img.complete);
@@ -260,7 +263,7 @@
     const title = game.title || 'Press Kit';
     document.title = title + ' — Press Kit';
     document.getElementById('brandName').textContent = title;
-    document.getElementById('heroTitle').textContent = game.title || 'Oyun Adı';
+    document.getElementById('pageTitle').textContent = title;
     document.getElementById('heroTagline').textContent = pick(game.tagline, lang);
 
     const bgUrl = game.keyArt || game.boxArt;
@@ -268,41 +271,99 @@
       document.getElementById('heroBg').style.backgroundImage = `url('${bgUrl.replace(/'/g, "\\'")}')`;
     }
 
-    renderQuickFacts(details, lang);
+    // Hero logo: prefer the uploaded logo image, fall back to the title as text
+    const heroLogoImg = document.getElementById('heroLogoImg');
+    const heroTitle = document.getElementById('heroTitle');
+    if (images.logo) {
+      heroLogoImg.src = images.logo;
+      heroLogoImg.style.display = '';
+      heroTitle.style.display = 'none';
+    } else {
+      heroLogoImg.style.display = 'none';
+      heroTitle.style.display = '';
+      heroTitle.textContent = game.title || 'Oyun Adı';
+    }
 
-    // Details
-    const kv = document.getElementById('detailsKv');
-    const kvRows = [];
-    if (details.developer) kvRows.push([t('kv.developer'), details.developer]);
-    if (details.publisher) kvRows.push([t('kv.publisher'), details.publisher]);
+    // Cover art floats over the hero
+    const coverArtWrap = document.getElementById('coverArtWrap');
+    if (game.boxArt) {
+      coverArtWrap.innerHTML = `<img src="${esc(game.boxArt)}" alt="${esc(title)}">`;
+      coverArtWrap.style.display = '';
+    } else {
+      coverArtWrap.innerHTML = '';
+      coverArtWrap.style.display = 'none';
+    }
+
+    // Byline
+    const byline = document.getElementById('byline');
+    const bylineName = details.developer || details.publisher || '';
+    byline.textContent = bylineName ? `${t('label.by')} ${bylineName}` : '';
+    byline.style.display = bylineName ? '' : 'none';
+
+    // Factsheet: genre
     const genre = pick(details.genre, lang);
-    if (genre) kvRows.push([t('kv.genre'), genre]);
-    kv.innerHTML = kvRows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+    const genreWrap = document.getElementById('genreWrap');
+    genreWrap.innerHTML = genre
+      ? `<span class="fact-label">${esc(t('kv.genre'))}:</span><div>${esc(genre)}</div>`
+      : '';
 
+    // Factsheet: platforms (+ Steam wishlist hero badge)
     const platforms = (details.platforms || []).filter(p => p && p.name);
     const platformsWrap = document.getElementById('platformsWrap');
     if (platforms.length) {
-      platformsWrap.innerHTML = `<h3>${esc(t('heading.platforms'))}</h3><div class="pill-row">${
+      platformsWrap.innerHTML = `<span class="fact-label">${esc(t('heading.platforms'))}:</span><div class="pill-row">${
         platforms.map(p => {
+          const isSteam = /steam/i.test(p.name);
+          const brand = isSteam ? 'steam' : 'generic';
           const date = pick(p.releaseDate, lang);
-          return `<span class="pill">${esc(p.name)}${date ? ' — ' + esc(date) : ''}</span>`;
+          const label = date ? `${p.name} — ${date}` : p.name;
+          const icon = ICONS[brand] || ICONS.website;
+          const tag = p.url ? 'a' : 'span';
+          const hrefAttr = p.url ? ` href="${esc(p.url)}" target="_blank" rel="noopener"` : '';
+          return `<${tag} class="icon-pill" data-brand="${brand}"${hrefAttr}>${icon}${esc(label)}</${tag}>`;
         }).join('')
       }</div>`;
     } else {
       platformsWrap.innerHTML = '';
     }
 
+    const steamPlatform = platforms.find(p => /steam/i.test(p.name) && p.url);
+    const heroWishlist = document.getElementById('heroWishlist');
+    if (steamPlatform) {
+      heroWishlist.href = steamPlatform.url;
+      heroWishlist.innerHTML = `${ICONS.steam}<span>${esc(t('wishlist.steam'))}</span>`;
+      heroWishlist.style.display = '';
+    } else {
+      heroWishlist.style.display = 'none';
+    }
+
+    // Factsheet: social media
     const social = (details.socialLinks || []).filter(s => s && s.url);
     const socialWrap = document.getElementById('socialWrap');
     if (social.length) {
-      socialWrap.innerHTML = `<h3>${esc(t('heading.social'))}</h3><div class="pill-row">${
-        social.map(s => `<a class="pill" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.label || s.url)}</a>`).join('')
+      socialWrap.innerHTML = `<span class="fact-label">${esc(t('heading.social'))}:</span><div class="pill-row">${
+        social.map(s => {
+          const { brand, label } = detectSocialBrand(s.url);
+          const icon = ICONS[brand] || ICONS.website;
+          return `<a class="icon-pill" data-brand="${brand}" href="${esc(s.url)}" target="_blank" rel="noopener">${icon}${esc(s.label || label || s.url)}</a>`;
+        }).join('')
       }</div>`;
     } else {
       socialWrap.innerHTML = '';
     }
 
-    // About
+    // Pitch
+    const pitchText = document.getElementById('pitchText');
+    const pitchStr = pick(about.pitch, lang);
+    if (pitchStr) {
+      pitchText.textContent = pitchStr;
+      pitchText.classList.remove('empty-note');
+    } else {
+      pitchText.textContent = t('empty.about');
+      pitchText.classList.add('empty-note');
+    }
+
+    // Description
     const aboutDesc = document.getElementById('aboutDesc');
     const descText = pick(about.description, lang);
     if (descText) {
@@ -428,6 +489,16 @@
     } else {
       pressSection.style.display = 'none';
     }
+
+    // Side navigation: only link to sections that actually have content
+    const navItems = [];
+    if (platforms.length || social.length || genre) navItems.push({ id: 'factsheetSection', label: t('section.factsheet') });
+    if (pitchStr || descText || features.length) navItems.push({ id: 'pitchSection', label: t('section.pitch') });
+    if (validContacts.length) navItems.push({ id: 'contactsSection', label: t('section.contacts') });
+    if (videoItems.length) navItems.push({ id: 'videosSection', label: t('section.videos') });
+    if (hasAnyImage) navItems.push({ id: 'imagesSection', label: t('section.images') });
+    if (validPress.length) navItems.push({ id: 'pressSection', label: t('section.press') });
+    document.getElementById('sideNav').innerHTML = navItems.map(i => `<a href="#${i.id}">${esc(i.label)}</a>`).join('');
 
     document.getElementById('pdfBtn').href = '/api/pdf?lang=' + lang;
   }

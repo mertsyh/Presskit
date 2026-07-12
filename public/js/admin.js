@@ -100,7 +100,8 @@
         <div class="field"><label>Platform Adı</label><input type="text" class="pf-name" value="${esc(d.name)}" placeholder="Steam, Epic Store, PS5..."></div>
         <div class="field"><label>Çıkış Tarihi (TR)</label><input type="text" class="pf-date-tr" value="${esc(bi(d.releaseDate).tr)}" placeholder="26 Haziran 2025"></div>
         <div class="field"><label>Çıkış Tarihi (EN)</label><input type="text" class="pf-date-en" value="${esc(bi(d.releaseDate).en)}" placeholder="June 26, 2025"></div>
-      </div>`,
+      </div>
+      <div class="field"><label>Link (mağaza sayfası / Steam wishlist)</label><input type="url" class="pf-url" value="${esc(d.url)}" placeholder="https://store.steampowered.com/app/..."></div>`,
     social: (d) => `
       <div class="row-2">
         <div class="field"><label>Platform</label><input type="text" class="sc-label" value="${esc(d.label)}" placeholder="Twitter, YouTube, TikTok..."></div>
@@ -342,6 +343,8 @@
     (details.platforms || []).forEach(p => addRow('platformsList', 'platform', p));
     (details.socialLinks || []).forEach(s => addRow('socialList', 'social', s));
 
+    setVal('f-pitch-tr', bi(about.pitch).tr);
+    setVal('f-pitch-en', bi(about.pitch).en);
     setVal('f-description-tr', bi(about.description).tr);
     setVal('f-description-en', bi(about.description).en);
     (about.keyFeatures || []).forEach(f => addRow('featuresList', 'feature', f));
@@ -375,6 +378,7 @@
         genre: { tr: val('f-genre-tr').trim(), en: val('f-genre-en').trim() },
         platforms: collectRows('platformsList', row => ({
           name: row.querySelector('.pf-name').value.trim(),
+          url: row.querySelector('.pf-url').value.trim(),
           releaseDate: {
             tr: row.querySelector('.pf-date-tr').value.trim(),
             en: row.querySelector('.pf-date-en').value.trim()
@@ -386,6 +390,7 @@
         }))
       },
       about: {
+        pitch: { tr: val('f-pitch-tr').trim(), en: val('f-pitch-en').trim() },
         description: { tr: val('f-description-tr').trim(), en: val('f-description-en').trim() },
         keyFeatures: collectRows('featuresList', row => ({
           tr: row.querySelector('.ft-text-tr').value.trim(),

@@ -19,35 +19,45 @@
   </div>
 </div>
 
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <a href="#" class="hero-wishlist no-print" id="heroWishlist" target="_blank" rel="noopener" style="display:none"></a>
+  <div class="hero-logo">
+    <img id="heroLogoImg" alt="" style="display:none">
+    <h1 id="heroTitle">Oyun Adı</h1>
+    <p class="tagline" id="heroTagline"></p>
+  </div>
+</section>
+
 <div class="wrap">
 
-  <section class="hero">
-    <div class="hero-bg" id="heroBg"></div>
-    <div class="hero-overlay"></div>
-    <div class="hero-content">
-      <h1 id="heroTitle">Oyun Adı</h1>
-      <p class="tagline" id="heroTagline"></p>
-    </div>
-  </section>
+  <div class="layout-grid">
+    <aside class="side-col">
+      <div class="cover-art-wrap" id="coverArtWrap" style="display:none"></div>
+      <h1 class="page-title" id="pageTitle"></h1>
+      <p class="byline" id="byline"></p>
+      <nav class="side-nav no-print" id="sideNav"></nav>
+    </aside>
 
-  <div class="quickfacts" id="quickFacts"></div>
-
-  <section class="block">
-    <div class="grid-2">
-      <div>
-        <h2 data-i18n="section.gameinfo">Oyun Bilgileri</h2>
-        <dl class="kv" id="detailsKv"></dl>
-        <div id="platformsWrap"></div>
-        <div id="socialWrap"></div>
-      </div>
-      <div>
-        <h2 data-i18n="section.about">Oyun Hakkında</h2>
-        <p id="aboutDesc" class="empty-note" data-i18n="empty.about">Henüz içerik girilmedi.</p>
-        <h3 data-i18n="section.features">Öne Çıkan Özellikler</h3>
-        <ul class="features" id="featuresList"></ul>
-      </div>
+    <div class="factsheet-col" id="factsheetSection">
+      <h2 data-i18n="section.factsheet">Factsheet</h2>
+      <div id="genreWrap"></div>
+      <div id="platformsWrap"></div>
+      <div id="socialWrap"></div>
     </div>
-  </section>
+
+    <div class="main-col" id="pitchSection">
+      <h2 data-i18n="section.pitch">Pitch</h2>
+      <p id="pitchText" class="empty-note"></p>
+
+      <h2 data-i18n="section.description">Açıklama</h2>
+      <p id="aboutDesc" class="empty-note" data-i18n="empty.about">Henüz içerik girilmedi.</p>
+
+      <h3 data-i18n="section.features">Öne Çıkan Özellikler</h3>
+      <ul class="features" id="featuresList"></ul>
+    </div>
+  </div>
 
   <section class="block" id="contactsSection">
     <h2 data-i18n="section.contacts">İletişim</h2>
