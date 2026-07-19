@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press Kit</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar no-print">
+  <div class="topbar-inner">
+    <div class="brand" id="brandName">Press Kit</div>
+    <nav>
+      <button type="button" class="nav-link" id="zipBtn" data-i18n="nav.zip">Zip olarak indir</button>
+      <button type="button" id="langToggle" class="lang-toggle">EN</button>
+    </nav>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <a href="#" class="hero-wishlist no-print" id="heroWishlist" target="_blank" rel="noopener" style="display:none"></a>
+  <div class="hero-logo">
+    <img id="heroLogoImg" alt="" style="display:none">
+    <h1 id="heroTitle">Oyun Adı</h1>
+    <p class="tagline" id="heroTagline"></p>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <div class="layout-grid">
+    <aside class="side-col">
+      <div class="cover-art-wrap" id="coverArtWrap" style="display:none"></div>
+      <h1 class="page-title" id="pageTitle"></h1>
+      <p class="byline" id="byline"></p>
+      <nav class="side-nav no-print" id="sideNav"></nav>
+    </aside>
+
+    <div class="factsheet-col" id="factsheetSection">
+      <h2 data-i18n="section.factsheet">Factsheet</h2>
+      <div id="genreWrap"></div>
+      <div id="platformsWrap"></div>
+      <div id="socialWrap"></div>
+    </div>
+
+    <div class="main-col" id="pitchSection">
+      <h2 data-i18n="section.pitch">Pitch</h2>
+      <p id="pitchText" class="empty-note"></p>
+
+      <h2 data-i18n="section.description">Açıklama</h2>
+      <p id="aboutDesc" class="empty-note" data-i18n="empty.about">Henüz içerik girilmedi.</p>
+
+      <h3 data-i18n="section.features">Öne Çıkan Özellikler</h3>
+      <ul class="features" id="featuresList"></ul>
+    </div>
+  </div>
+
+  <section class="block" id="contactsSection">
+    <h2 data-i18n="section.contacts">İletişim</h2>
+    <div class="contacts-grid" id="contactsGrid"></div>
+  </section>
+
+  <section class="block" id="videosSection">
+    <h2 data-i18n="section.videos">Videolar</h2>
+    <a id="videosDownload" class="download-link" style="display:none" target="_blank" rel="noopener">📥 <span data-i18n="link.videosdownload">Tüm videoları indir</span></a>
+    <div class="video-grid" id="videoGrid"></div>
+  </section>
+
+  <section class="block" id="imagesSection">
+    <h2 data-i18n="section.images">Görseller</h2>
+    <a id="imagesDownload" class="download-link" style="display:none" target="_blank" rel="noopener">📥 <span data-i18n="link.imagesdownload">Tüm görselleri indir</span></a>
+
+    <h3 data-i18n="sub.artwork">Artwork</h3>
+    <div class="gallery" id="artworkGallery"></div>
+
+    <h3 data-i18n="sub.screenshots">Ekran Görüntüleri</h3>
+    <div class="gallery" id="screenshotsGallery"></div>
+
+    <h3 data-i18n="sub.gifs">GIF'ler</h3>
+    <div class="gallery" id="gifsGallery"></div>
+
+    <h3 data-i18n="sub.logo">Logo</h3>
+    <div class="logo-box" id="logoBox"></div>
+
+    <h3 data-i18n="sub.assets">Ek Görseller</h3>
+    <div class="gallery" id="assetsGallery"></div>
+  </section>
+
+  <section class="block" id="pressSection">
+    <h2 data-i18n="section.press">Basın Bültenleri</h2>
+    <div class="press-list" id="pressList"></div>
+  </section>
+
+</div>
+
+<div class="lightbox no-print" id="lightbox">
+  <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Kapat">×</button>
+  <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Önceki">‹</button>
+  <button type="button" class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Sonraki">›</button>
+  <figure>
+    <img id="lightboxImg" src="" alt="">
+    <figcaption id="lightboxCaption"></figcaption>
+  </figure>
+</div>
+
+<script src="js/vendor/jszip.min.js"></script>
+<script src="js/zip.js"></script>
+<script src="js/view.js"></script>
+</body>
+</html>

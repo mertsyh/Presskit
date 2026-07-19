@@ -60,9 +60,10 @@
     return json.url;
   }
 
-  function wireSingleImageUpload(fileId, previewId) {
+  function wireSingleImageUpload(fileId, previewId, urlId) {
     const fileInput = document.getElementById(fileId);
     const preview = document.getElementById(previewId);
+    const urlInput = urlId ? document.getElementById(urlId) : null;
     fileInput.addEventListener('change', async () => {
       const file = fileInput.files[0];
       if (!file) return;
@@ -70,6 +71,7 @@
       try {
         const url = await uploadFile(file);
         fileInput.dataset.url = url;
+        if (urlInput) urlInput.value = url;
         preview.src = url;
         preview.classList.add('show');
         setStatus('Yüklendi ✓', 'ok');
@@ -79,11 +81,30 @@
     });
   }
 
-  function setSingleImageValue(fileId, previewId, url) {
+  function wireSingleImageUrlInput(urlId, fileId, previewId) {
+    const urlInput = document.getElementById(urlId);
     const fileInput = document.getElementById(fileId);
     const preview = document.getElementById(previewId);
+    urlInput.addEventListener('input', () => {
+      const url = urlInput.value.trim();
+      fileInput.dataset.url = url;
+      if (url) {
+        preview.src = url;
+        preview.classList.add('show');
+      } else {
+        preview.removeAttribute('src');
+        preview.classList.remove('show');
+      }
+    });
+  }
+
+  function setSingleImageValue(fileId, previewId, url, urlId) {
+    const fileInput = document.getElementById(fileId);
+    const preview = document.getElementById(previewId);
+    const urlInput = urlId ? document.getElementById(urlId) : null;
     fileInput.value = '';
     fileInput.dataset.url = url || '';
+    if (urlInput) urlInput.value = url || '';
     if (url) {
       preview.src = url;
       preview.classList.add('show');
@@ -133,14 +154,32 @@
       </div>`,
   };
   const imageRowTemplate = (d) => `
-    <div class="upload-row"><input type="file" class="im-file" accept="image/*"></div>
-    <input type="hidden" class="im-url" value="${esc(d.url)}">
+    <div class="upload-row">
+      <input type="file" class="im-file" accept="image/*">
+      <input type="url" class="im-url inline-url-input" placeholder="veya görsel URL'si yapıştırın" value="${esc(d.url)}">
+    </div>
     <div class="row-2" style="margin-top:8px;">
       <div class="field"><label>Açıklama (TR)</label><input type="text" class="im-caption-tr" value="${esc(bi(d.caption).tr)}"></div>
       <div class="field"><label>Açıklama (EN)</label><input type="text" class="im-caption-en" value="${esc(bi(d.caption).en)}"></div>
     </div>
     <img class="thumb-preview ${d.url ? 'show' : ''}" src="${esc(d.url || '')}">`;
   ['artwork', 'screenshots', 'gifs', 'assets'].forEach(t => { rowTemplates[t] = imageRowTemplate; });
+
+  function wireImageUrlInputs(row) {
+    const urlInput = row.querySelector('.im-url');
+    if (!urlInput) return;
+    urlInput.addEventListener('input', () => {
+      const url = urlInput.value.trim();
+      const preview = row.querySelector('.thumb-preview');
+      if (url) {
+        preview.src = url;
+        preview.classList.add('show');
+      } else {
+        preview.removeAttribute('src');
+        preview.classList.remove('show');
+      }
+    });
+  }
 
   function wireUploads(row) {
     row.querySelectorAll('input[type=file]').forEach(fileInput => {
@@ -235,6 +274,7 @@
 
     container.appendChild(row);
     wireUploads(row);
+    wireImageUrlInputs(row);
     wireDragEvents(row);
   }
 
@@ -333,8 +373,8 @@
     setVal('f-title', game.title);
     setVal('f-tagline-tr', bi(game.tagline).tr);
     setVal('f-tagline-en', bi(game.tagline).en);
-    setSingleImageValue('f-boxArt-file', 'f-boxArt-preview', game.boxArt);
-    setSingleImageValue('f-keyArt-file', 'f-keyArt-preview', game.keyArt);
+    setSingleImageValue('f-boxArt-file', 'f-boxArt-preview', game.boxArt, 'f-boxArt-url');
+    setSingleImageValue('f-keyArt-file', 'f-keyArt-preview', game.keyArt, 'f-keyArt-url');
 
     setVal('f-developer', details.developer);
     setVal('f-publisher', details.publisher);
@@ -355,7 +395,7 @@
     (videos.items || []).forEach(v => addRow('videosList', 'video', v));
 
     setVal('f-imagesDownload', images.downloadLink);
-    setSingleImageValue('f-logo-file', 'f-logo-preview', images.logo);
+    setSingleImageValue('f-logo-file', 'f-logo-preview', images.logo, 'f-logo-url');
     (images.artwork || []).forEach(i => addRow('artworkList', 'artwork', i));
     (images.screenshots || []).forEach(i => addRow('screenshotsList', 'screenshots', i));
     (images.gifs || []).forEach(i => addRow('gifsList', 'gifs', i));
@@ -494,9 +534,12 @@
   };
 
   function initStaticHandlers() {
-    wireSingleImageUpload('f-boxArt-file', 'f-boxArt-preview');
-    wireSingleImageUpload('f-keyArt-file', 'f-keyArt-preview');
-    wireSingleImageUpload('f-logo-file', 'f-logo-preview');
+    wireSingleImageUpload('f-boxArt-file', 'f-boxArt-preview', 'f-boxArt-url');
+    wireSingleImageUpload('f-keyArt-file', 'f-keyArt-preview', 'f-keyArt-url');
+    wireSingleImageUpload('f-logo-file', 'f-logo-preview', 'f-logo-url');
+    wireSingleImageUrlInput('f-boxArt-url', 'f-boxArt-file', 'f-boxArt-preview');
+    wireSingleImageUrlInput('f-keyArt-url', 'f-keyArt-file', 'f-keyArt-preview');
+    wireSingleImageUrlInput('f-logo-url', 'f-logo-file', 'f-logo-preview');
     wireBulkUploads();
 
     document.querySelectorAll('[data-add]').forEach(btn => {

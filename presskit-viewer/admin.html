@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Press Kit — İçe Aktar</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar no-print">
+  <div class="topbar-inner">
+    <div class="brand">Press Kit — İçe Aktar</div>
+    <nav>
+      <a href="index.html" target="_blank">Görüntüle ↗</a>
+    </nav>
+  </div>
+</div>
+
+<div class="wrap" style="padding-top:32px;">
+
+  <div class="admin-section">
+    <h2>JSON İçe Aktar</h2>
+    <p class="empty-note">
+      Mevcut press kit admin panelinden ("JSON Dışa Aktar" ile) aldığınız JSON dosyasını buraya yükleyin.
+      Görsellerin URL'lerinin tam adres (örn. <code>https://raw.githubusercontent.com/...</code>) olması gerekir.
+    </p>
+
+    <div class="import-drop" id="dropZone">
+      <div>📄 JSON dosyasını buraya sürükleyin ya da tıklayıp seçin</div>
+    </div>
+    <input type="file" id="importFile" accept="application/json" style="display:none">
+  </div>
+
+  <div class="admin-section" id="resultBox" style="display:none;">
+    <h2>İçe Aktarılan Veri: <span id="resultTitle"></span></h2>
+    <p class="empty-note">Bu tarayıcıda önizleme için kaydedildi. Sitenin TÜM ziyaretçilere aynı içeriği göstermesi için aşağıdaki dosyayı indirip <code>presskit-viewer/data.json</code> olarak repoya koyup deploy edin.</p>
+    <div class="admin-toolbar">
+      <a class="btn btn-primary" href="index.html" target="_blank">Görüntüle ↗</a>
+      <button class="btn" id="downloadDataBtn">⬇ data.json indir</button>
+    </div>
+    <hr class="sep">
+    <label style="display:block;margin-bottom:8px;color:var(--text-dim);font-size:0.85rem;">Bulunan görseller</label>
+    <div class="preview-list" id="previewList"></div>
+  </div>
+
+</div>
+
+<div class="status-bar" id="statusBar"></div>
+
+<script src="js/import.js"></script>
+</body>
+</html>
