@@ -468,23 +468,136 @@
     };
   }
 
+  // ---------- GitHub API (fallback save/load when no local server is reachable) ----------
+  const GITHUB_DEFAULTS = { owner: 'mertsyh', repo: 'Presskit', branch: 'main', path: 'data/data.json' };
+  const GITHUB_CONFIG_KEY = 'presskitGithubConfig';
+
+  function loadGithubConfig() {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(GITHUB_CONFIG_KEY) || '{}'); } catch (e) { /* ignore */ }
+    return Object.assign({}, GITHUB_DEFAULTS, stored);
+  }
+
+  function saveGithubConfig(cfg) {
+    localStorage.setItem(GITHUB_CONFIG_KEY, JSON.stringify(cfg));
+  }
+
+  function utf8ToBase64(str) {
+    const bytes = new TextEncoder().encode(str);
+    let binary = '';
+    bytes.forEach(b => { binary += String.fromCharCode(b); });
+    return btoa(binary);
+  }
+
+  async function loadDataFromRaw(cfg) {
+    const url = `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}/${cfg.path}?_=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error("GitHub'dan veri okunamadı (HTTP " + res.status + ')');
+    return res.json();
+  }
+
+  async function saveDataToGithub(cfg, data) {
+    const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+    const headers = {
+      'Authorization': 'Bearer ' + cfg.token,
+      'Accept': 'application/vnd.github+json'
+    };
+    let sha;
+    const getRes = await fetch(apiUrl + '?ref=' + encodeURIComponent(cfg.branch), { headers });
+    if (getRes.ok) {
+      sha = (await getRes.json()).sha;
+    } else if (getRes.status !== 404) {
+      const errJson = await getRes.json().catch(() => ({}));
+      throw new Error(errJson.message || ('GitHub okuma hatası (HTTP ' + getRes.status + ')'));
+    }
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: Object.assign({ 'Content-Type': 'application/json' }, headers),
+      body: JSON.stringify({
+        message: 'Update press kit data',
+        content: utf8ToBase64(JSON.stringify(data, null, 2)),
+        branch: cfg.branch,
+        sha
+      })
+    });
+    if (!putRes.ok) {
+      const errJson = await putRes.json().catch(() => ({}));
+      throw new Error(errJson.message || ("GitHub'a yazma hatası (HTTP " + putRes.status + ')'));
+    }
+  }
+
+  function initGithubSettingsUI() {
+    const cfg = loadGithubConfig();
+    document.getElementById('gh-owner').value = cfg.owner;
+    document.getElementById('gh-repo').value = cfg.repo;
+    document.getElementById('gh-branch').value = cfg.branch;
+    document.getElementById('gh-path').value = cfg.path;
+    document.getElementById('gh-token').value = cfg.token || '';
+    document.getElementById('githubSettingsSave').addEventListener('click', () => {
+      saveGithubConfig({
+        owner: document.getElementById('gh-owner').value.trim() || GITHUB_DEFAULTS.owner,
+        repo: document.getElementById('gh-repo').value.trim() || GITHUB_DEFAULTS.repo,
+        branch: document.getElementById('gh-branch').value.trim() || GITHUB_DEFAULTS.branch,
+        path: document.getElementById('gh-path').value.trim() || GITHUB_DEFAULTS.path,
+        token: document.getElementById('gh-token').value.trim()
+      });
+      setStatus('GitHub ayarları kaydedildi.', 'ok');
+    });
+  }
+
+  async function saveViaGithub(data) {
+    const cfg = loadGithubConfig();
+    if (!cfg.token) {
+      setStatus('Yerel sunucuya bağlanılamadı. GitHub üzerinden kaydetmek için önce aşağıdaki "GitHub Ayarları"na bir Personal Access Token girip kaydedin.', 'err');
+      const details = document.getElementById('githubSettings');
+      if (details) details.open = true;
+      return;
+    }
+    setStatus("GitHub'a commit ediliyor...", null);
+    try {
+      await saveDataToGithub(cfg, data);
+      clearDirty();
+      setStatus("Kaydedildi ✓ (GitHub'a commit edildi — birkaç dakika içinde yayına girecek)", 'ok');
+    } catch (e) {
+      setStatus("GitHub'a kaydetme hatası: " + e.message, 'err');
+    }
+  }
+
   // ---------- save / export / import ----------
   async function save() {
     const data = collectAll();
     setStatus('Kaydediliyor...', null);
+    let res;
     try {
-      const res = await fetch('/api/data', {
+      res = await fetch('/api/data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      const json = await res.json();
-      if (!res.ok) throw new Error(json.error || 'Bilinmeyen hata');
+    } catch (e) {
+      // network-level failure (connection refused, offline, ...) -> no local server at all
+      await saveViaGithub(data);
+      return;
+    }
+    if (res.ok) {
       await cleanupOrphanedFiles(data);
       clearDirty();
       setStatus('Kaydedildi ✓', 'ok');
-    } catch (e) {
-      setStatus('Kaydetme hatası: ' + e.message, 'err');
+      return;
+    }
+    // Got an HTTP response but not a success. A real running server responds with a JSON
+    // { error } body; a static host with no /api/data at all serves its own (HTML) 404 page
+    // for this path instead — that's the signal to fall back to committing via GitHub.
+    let serverError = null;
+    try {
+      const json = await res.json();
+      serverError = json && json.error;
+    } catch (e) { /* not JSON -> not our API */ }
+    if (serverError) {
+      setStatus('Kaydetme hatası: ' + serverError, 'err');
+    } else {
+      await saveViaGithub(data);
     }
   }
 
@@ -555,18 +668,44 @@
     document.getElementById('exportBtn').addEventListener('click', exportJson);
     document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
     document.getElementById('importFile').addEventListener('change', handleImport);
+    document.getElementById('zipBtn').addEventListener('click', async () => {
+      if (!window.PresskitZip) return;
+      const btn = document.getElementById('zipBtn');
+      const original = btn.textContent;
+      btn.setAttribute('disabled', 'disabled');
+      btn.textContent = 'Hazırlanıyor...';
+      try {
+        await window.PresskitZip.downloadZip(collectAll());
+      } finally {
+        btn.removeAttribute('disabled');
+        btn.textContent = original;
+      }
+    });
   }
 
   async function init() {
     initStaticHandlers();
+    initGithubSettingsUI();
     try {
       const res = await fetch('/api/data');
+      if (!res.ok) throw new Error('http ' + res.status);
       const data = await res.json();
       populateForm(data);
       initialUrls = collectAllUrls(data);
       clearDirty();
-      document.getElementById('loadState').textContent = 'Mevcut taslak yüklendi.';
+      document.getElementById('loadState').textContent = 'Mevcut taslak yüklendi (yerel sunucu).';
+      return;
     } catch (e) {
+      // no local server reachable (e.g. static hosting) -> fall back to the committed GitHub copy
+    }
+    try {
+      const cfg = loadGithubConfig();
+      const data = await loadDataFromRaw(cfg);
+      populateForm(data);
+      initialUrls = collectAllUrls(data);
+      clearDirty();
+      document.getElementById('loadState').textContent = `Mevcut taslak yüklendi (GitHub: ${cfg.owner}/${cfg.repo}).`;
+    } catch (e2) {
       document.getElementById('loadState').textContent = 'Veri yüklenemedi, boş form gösteriliyor.';
     }
   }

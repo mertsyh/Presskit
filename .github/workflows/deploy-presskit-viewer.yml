@@ -1,10 +1,10 @@
-name: Deploy Press Kit Viewer to GitHub Pages
+name: Deploy Press Kit to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
-      - 'presskit-viewer/**'
+      - 'public/**'
       - '.github/workflows/deploy-presskit-viewer.yml'
   workflow_dispatch:
 
@@ -31,7 +31,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: presskit-viewer
+          path: public
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

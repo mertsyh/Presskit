@@ -2,6 +2,7 @@
   const STRINGS = {
     tr: {
       'nav.zip': 'Zip olarak indir',
+      'nav.zip.working': 'Hazırlanıyor...',
       'nav.pdf': 'PDF olarak indir',
       'section.factsheet': 'Factsheet',
       'section.pitch': 'Pitch',
@@ -28,6 +29,7 @@
     },
     en: {
       'nav.zip': 'Download zip',
+      'nav.zip.working': 'Preparing...',
       'nav.pdf': 'Download as PDF',
       'section.factsheet': 'Factsheet',
       'section.pitch': 'Pitch',
@@ -499,18 +501,38 @@
     if (hasAnyImage) navItems.push({ id: 'imagesSection', label: t('section.images') });
     if (validPress.length) navItems.push({ id: 'pressSection', label: t('section.press') });
     document.getElementById('sideNav').innerHTML = navItems.map(i => `<a href="#${i.id}">${esc(i.label)}</a>`).join('');
+  }
 
-    document.getElementById('pdfBtn').href = '/api/pdf?lang=' + lang;
+  // ---------- data loading: local server first, GitHub raw file as static-hosting fallback ----------
+  const GITHUB_DEFAULTS = { owner: 'mertsyh', repo: 'Presskit', branch: 'main', path: 'data/data.json' };
+
+  function loadGithubConfig() {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem('presskitGithubConfig') || '{}'); } catch (e) { /* ignore */ }
+    return Object.assign({}, GITHUB_DEFAULTS, stored);
+  }
+
+  async function loadDataFromRaw() {
+    const cfg = loadGithubConfig();
+    const url = `https://raw.githubusercontent.com/${cfg.owner}/${cfg.repo}/${cfg.branch}/${cfg.path}?_=${Date.now()}`;
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('http ' + res.status);
+    return res.json();
   }
 
   async function fetchAndRender() {
     let data;
     try {
       const res = await fetch('/api/data');
+      if (!res.ok) throw new Error('http ' + res.status);
       data = await res.json();
     } catch (e) {
-      document.querySelector('.wrap').innerHTML = '<p class="empty-note">Veri yüklenemedi.</p>';
-      return;
+      try {
+        data = await loadDataFromRaw();
+      } catch (e2) {
+        document.querySelector('.wrap').innerHTML = '<p class="empty-note">Veri yüklenemedi.</p>';
+        return;
+      }
     }
     currentData = data;
     render(data);
@@ -520,6 +542,43 @@
 
   document.getElementById('langToggle').addEventListener('click', () => {
     setLang(currentLang === 'tr' ? 'en' : 'tr');
+  });
+
+  document.getElementById('zipBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!currentData || !window.PresskitZip) return;
+    const btn = e.currentTarget;
+    const original = btn.textContent;
+    btn.textContent = t('nav.zip.working') || '...';
+    try {
+      await window.PresskitZip.downloadZip(currentData);
+    } finally {
+      btn.textContent = original;
+    }
+  });
+
+  document.getElementById('pdfBtn').addEventListener('click', async (e) => {
+    e.preventDefault();
+    const btn = e.currentTarget;
+    const original = btn.textContent;
+    btn.textContent = '...';
+    try {
+      const res = await fetch('/api/pdf?lang=' + currentLang);
+      if (!res.ok) throw new Error('http ' + res.status);
+      const blob = await res.blob();
+      const title = (currentData && currentData.game && currentData.game.title) || 'presskit';
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = title + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(a.href);
+    } catch (err) {
+      alert('PDF export sadece yerel sunucu (server.js) çalışırken kullanılabilir. Statik barındırmada (GitHub Pages/Netlify) bu özellik yok.');
+    } finally {
+      btn.textContent = original;
+    }
   });
 
   initLightbox();

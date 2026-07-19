@@ -24,11 +24,34 @@
     <button class="btn" id="exportBtn">JSON Dışa Aktar</button>
     <button class="btn" id="importBtn">JSON İçe Aktar</button>
     <input type="file" id="importFile" accept="application/json" style="display:none">
-    <a class="btn" id="zipBtn" href="/api/download-zip">📦 Zip İndir</a>
+    <button type="button" class="btn" id="zipBtn">📦 Zip İndir</button>
     <div class="spacer"></div>
     <span id="dirtyBadge" class="dirty-badge">● Kaydedilmemiş değişiklikler var</span>
     <span id="loadState" class="empty-note"></span>
   </div>
+
+  <details class="admin-section" id="githubSettings" style="margin-bottom:24px;">
+    <summary style="cursor:pointer;font-weight:600;">GitHub Ayarları (sunucu yokken Kaydet/Yükle için)</summary>
+    <p class="empty-note" style="margin-top:12px;">
+      Bu panel yerel sunucuya (localhost) bağlanamazsa — örn. GitHub Pages/Netlify'da statik olarak açıldığında —
+      Kaydet ve veri yükleme burada girdiğiniz repoya doğrudan GitHub API üzerinden yapılır.
+      Token'ı sadece <b>bu repoya özel, "Contents: Read and write" izinli bir fine-grained Personal Access Token</b>
+      olarak oluşturun; sadece bu tarayıcıda (localStorage) saklanır, başka hiçbir yere gönderilmez.
+    </p>
+    <div class="row-2">
+      <div class="field"><label>Repo sahibi (owner)</label><input type="text" id="gh-owner"></div>
+      <div class="field"><label>Repo adı</label><input type="text" id="gh-repo"></div>
+    </div>
+    <div class="row-2">
+      <div class="field"><label>Branch</label><input type="text" id="gh-branch"></div>
+      <div class="field"><label>Dosya yolu</label><input type="text" id="gh-path"></div>
+    </div>
+    <div class="field">
+      <label>Personal Access Token</label>
+      <input type="password" id="gh-token" placeholder="github_pat_..." autocomplete="off">
+    </div>
+    <button type="button" class="btn" id="githubSettingsSave">GitHub Ayarlarını Kaydet</button>
+  </details>
 
   <!-- OYUN -->
   <div class="admin-section">
@@ -217,6 +240,8 @@
 
 <div class="status-bar" id="statusBar"></div>
 
+<script src="/js/vendor/jszip.min.js"></script>
+<script src="/js/zip.js"></script>
 <script src="/js/admin.js"></script>
 </body>
 </html>

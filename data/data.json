@@ -5,8 +5,8 @@
       "tr": "",
       "en": ""
     },
-    "boxArt": "https://github.com/mertsyh/Presskit/blob/main/uploads/7ac3c90533a62cd2.png?raw=true",
-    "keyArt": "https://github.com/mertsyh/Presskit/blob/main/uploads/c9bacc23446374fd.png?raw=true"
+    "boxArt": "/uploads/c19090e4bae6e22e.png",
+    "keyArt": "/uploads/8df2295c74bc06a2.png"
   },
   "details": {
     "developer": "ALIEN CAT STUDIOS",
@@ -63,6 +63,21 @@
       "role": "Developer",
       "name": "Orkun Yılmaz",
       "email": ""
+    },
+    {
+      "role": "Designer",
+      "name": "İdil Gülcenur Kılıç",
+      "email": ""
+    },
+    {
+      "role": "Designer",
+      "name": "Buket Pehlivanoğlu",
+      "email": ""
+    },
+    {
+      "role": "",
+      "name": "Yağız",
+      "email": ""
     }
   ],
   "videos": {
@@ -79,18 +94,18 @@
   },
   "images": {
     "downloadLink": "",
-    "logo": "https://github.com/mertsyh/Presskit/blob/main/uploads/7ac3c90533a62cd2.png?raw=true",
+    "logo": "/uploads/d1e6cc6c8c051f4e.png",
     "artwork": [],
     "screenshots": [
       {
-        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/bc3c6646b015d3aa.png?raw=true",
+        "url": "/uploads/1721b57efbe142cc.png",
         "caption": {
           "tr": "",
           "en": ""
         }
       },
       {
-        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/d668ee0e7209d0a3.png?raw=true",
+        "url": "/uploads/30f17e60f8fea5b7.png",
         "caption": {
           "tr": "",
           "en": ""
@@ -99,7 +114,7 @@
     ],
     "gifs": [
       {
-        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/29deba680712037a.gif?raw=true",
+        "url": "/uploads/0916d0fef0825d60.gif",
         "caption": {
           "tr": "",
           "en": ""
