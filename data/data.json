@@ -5,8 +5,8 @@
       "tr": "",
       "en": ""
     },
-    "boxArt": "/uploads/c19090e4bae6e22e.png",
-    "keyArt": "/uploads/8df2295c74bc06a2.png"
+    "boxArt": "https://github.com/mertsyh/Presskit/blob/main/uploads/c19090e4bae6e22e.png?raw=true",
+    "keyArt": "https://github.com/mertsyh/Presskit/blob/main/uploads/8df2295c74bc06a2.png?raw=true"
   },
   "details": {
     "developer": "ALIEN CAT STUDIOS",
@@ -94,18 +94,18 @@
   },
   "images": {
     "downloadLink": "",
-    "logo": "/uploads/d1e6cc6c8c051f4e.png",
+    "logo": "https://github.com/mertsyh/Presskit/blob/main/uploads/d1e6cc6c8c051f4e.png?raw=true",
     "artwork": [],
     "screenshots": [
       {
-        "url": "/uploads/1721b57efbe142cc.png",
+        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/1721b57efbe142cc.png?raw=true",
         "caption": {
           "tr": "",
           "en": ""
         }
       },
       {
-        "url": "/uploads/30f17e60f8fea5b7.png",
+        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/30f17e60f8fea5b7.png?raw=true",
         "caption": {
           "tr": "",
           "en": ""
@@ -114,7 +114,7 @@
     ],
     "gifs": [
       {
-        "url": "/uploads/0916d0fef0825d60.gif",
+        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/0916d0fef0825d60.gif?raw=true",
         "caption": {
           "tr": "",
           "en": ""
