@@ -9,11 +9,11 @@
     "keyArt": "/uploads/c9bacc23446374fd.png"
   },
   "details": {
-    "developer": "",
+    "developer": "ALIEN CAT STUDIOS",
     "publisher": "",
     "genre": {
-      "tr": "",
-      "en": ""
+      "tr": "COZY | IDLE",
+      "en": "COZY | IDLE"
     },
     "platforms": [
       {
@@ -23,20 +23,12 @@
           "tr": "1 kasım 2026",
           "en": "november 1 2026"
         }
-      },
-      {
-        "name": "",
-        "url": "",
-        "releaseDate": {
-          "tr": "",
-          "en": ""
-        }
       }
     ],
     "socialLinks": [
       {
-        "label": "",
-        "url": ""
+        "label": "Instagram",
+        "url": "https://instagram.com/cozycornercafegame"
       }
     ]
   },
@@ -58,19 +50,14 @@
   },
   "contacts": [
     {
-      "role": "PR",
-      "name": "",
-      "email": ""
-    },
-    {
-      "role": "Publisher",
-      "name": "",
-      "email": ""
+      "role": "Team Leader",
+      "name": "Bahattin Baran Serin",
+      "email": "baran.serin8@outlook.com"
     },
     {
       "role": "Developer",
-      "name": "",
-      "email": ""
+      "name": "Mehmet Mert Seyhan",
+      "email": "mertseyhan4@gmail.com"
     }
   ],
   "videos": {
@@ -87,11 +74,25 @@
   },
   "images": {
     "downloadLink": "",
-    "logo": "",
+    "logo": "/uploads/7ac3c90533a62cd2.png",
     "artwork": [],
     "screenshots": [
       {
         "url": "",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      },
+      {
+        "url": "/uploads/d668ee0e7209d0a3.png",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      },
+      {
+        "url": "/uploads/bc3c6646b015d3aa.png",
         "caption": {
           "tr": "",
           "en": ""
@@ -101,6 +102,13 @@
     "gifs": [
       {
         "url": "",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      },
+      {
+        "url": "/uploads/29deba680712037a.gif",
         "caption": {
           "tr": "",
           "en": ""
