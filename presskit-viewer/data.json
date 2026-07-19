@@ -1,0 +1,121 @@
+{
+  "game": {
+    "title": "Cozy Corner Cafe",
+    "tagline": {
+      "tr": "",
+      "en": ""
+    },
+    "boxArt": "https://github.com/mertsyh/Presskit/blob/main/uploads/7ac3c90533a62cd2.png?raw=true",
+    "keyArt": "https://github.com/mertsyh/Presskit/blob/main/uploads/c9bacc23446374fd.png?raw=true"
+  },
+  "details": {
+    "developer": "ALIEN CAT STUDIOS",
+    "publisher": "",
+    "genre": {
+      "tr": "COZY | IDLE",
+      "en": "COZY | IDLE"
+    },
+    "platforms": [
+      {
+        "name": "Steam",
+        "url": "",
+        "releaseDate": {
+          "tr": "1 kasım 2026",
+          "en": "november 1 2026"
+        }
+      }
+    ],
+    "socialLinks": [
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/cozycornercafegame"
+      }
+    ]
+  },
+  "about": {
+    "pitch": {
+      "tr": "",
+      "en": ""
+    },
+    "description": {
+      "tr": "",
+      "en": ""
+    },
+    "keyFeatures": [
+      {
+        "tr": "",
+        "en": ""
+      }
+    ]
+  },
+  "contacts": [
+    {
+      "role": "Team Leader",
+      "name": "Bahattin Baran Serin",
+      "email": "baran.serin8@outlook.com"
+    },
+    {
+      "role": "Developer",
+      "name": "Mehmet Mert Seyhan",
+      "email": "mertseyhan4@gmail.com"
+    }
+  ],
+  "videos": {
+    "downloadLink": "",
+    "items": [
+      {
+        "title": {
+          "tr": "",
+          "en": ""
+        },
+        "url": ""
+      }
+    ]
+  },
+  "images": {
+    "downloadLink": "",
+    "logo": "https://github.com/mertsyh/Presskit/blob/main/uploads/7ac3c90533a62cd2.png?raw=true",
+    "artwork": [],
+    "screenshots": [
+      {
+        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/bc3c6646b015d3aa.png?raw=true",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      },
+      {
+        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/d668ee0e7209d0a3.png?raw=true",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ],
+    "gifs": [
+      {
+        "url": "https://github.com/mertsyh/Presskit/blob/main/uploads/29deba680712037a.gif?raw=true",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ],
+    "additionalAssets": [
+      {
+        "url": "",
+        "caption": {
+          "tr": "",
+          "en": ""
+        }
+      }
+    ]
+  },
+  "pressReleases": [
+    {
+      "title": "",
+      "url": "",
+      "date": ""
+    }
+  ]
+}

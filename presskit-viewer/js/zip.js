@@ -16,6 +16,21 @@
     return /\.(mp4|webm)$/i.test(url || '');
   }
 
+  // github.com/{owner}/{repo}/blob/{branch}/{path}(?raw=true) or /raw/{branch}/{path}
+  // both redirect through a hop whose Access-Control-Allow-Origin header is empty,
+  // which fails a cross-origin fetch() even though the final raw.githubusercontent.com
+  // response allows it. Rewriting to the raw host directly avoids that broken hop.
+  function normalizeGithubUrl(url) {
+    try {
+      const u = new URL(url, window.location.href);
+      if (u.hostname === 'github.com') {
+        const m = u.pathname.match(/^\/([^/]+)\/([^/]+)\/(?:blob|raw)\/(.+)$/);
+        if (m) return `https://raw.githubusercontent.com/${m[1]}/${m[2]}/${m[3]}`;
+      }
+    } catch (e) { /* not a valid absolute URL, leave as-is */ }
+    return url;
+  }
+
   function extFromUrl(url, mimeType) {
     try {
       const pathname = new URL(url, window.location.href).pathname;
@@ -71,7 +86,8 @@
       for (let idx = 0; idx < valid.length; idx++) {
         const item = valid[idx];
         try {
-          const resp = await fetch(item.url, { mode: 'cors' });
+          const fetchUrl = normalizeGithubUrl(item.url);
+          const resp = await fetch(fetchUrl, { mode: 'cors' });
           if (!resp.ok) throw new Error('HTTP ' + resp.status);
           const blob = await resp.blob();
           const ext = extFromUrl(item.url, blob.type) || '';

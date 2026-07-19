@@ -1,4 +1,8 @@
 (function () {
+  const ADMIN_PASSWORD_HASH = 'baebfe6318b532e2b86584a8e1882a0bc37c8dd964409094734f34fe21e638da';
+  const AUTH_KEY = 'presskitAdminAuthed';
+  const DATA_KEY = 'presskitData';
+
   function esc(s) {
     return String(s == null ? '' : s)
       .replace(/&/g, '&amp;')
@@ -12,12 +16,44 @@
     return field || '';
   }
 
+  async function sha256Hex(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  // ---------- password gate ----------
+  function initGate() {
+    const gate = document.getElementById('authGate');
+    if (localStorage.getItem(AUTH_KEY) === '1') {
+      gate.classList.add('hide');
+    }
+    document.getElementById('gateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pw = document.getElementById('gatePassword').value;
+      const hash = await sha256Hex(pw);
+      if (hash === ADMIN_PASSWORD_HASH) {
+        localStorage.setItem(AUTH_KEY, '1');
+        gate.classList.add('hide');
+        document.getElementById('gateError').textContent = '';
+      } else {
+        document.getElementById('gateError').textContent = 'Yanlış şifre.';
+      }
+    });
+    document.getElementById('lockBtn').addEventListener('click', () => {
+      localStorage.removeItem(AUTH_KEY);
+      gate.classList.remove('hide');
+      document.getElementById('gatePassword').value = '';
+    });
+  }
+
+  // ---------- status ----------
   function setStatus(msg, type) {
     const bar = document.getElementById('statusBar');
     bar.textContent = msg;
     bar.className = 'status-bar show' + (type ? ' ' + type : '');
   }
 
+  // ---------- import / save ----------
   function collectImageUrls(data) {
     const game = data.game || {};
     const images = data.images || {};
@@ -64,7 +100,20 @@
     URL.revokeObjectURL(a.href);
   }
 
-  let lastImported = null;
+  let currentData = null;
+  let isSaved = false;
+
+  function updateSaveHint() {
+    const hint = document.getElementById('saveHint');
+    const saveBtn = document.getElementById('saveBtn');
+    if (isSaved) {
+      hint.textContent = 'Bu veri tarayıcınızda kaydedildi — index.html\'i her açtığınızda bu içeriği göreceksiniz. Sitenin TÜM ziyaretçilere aynı içeriği göstermesi için "data.json indir" ile aldığınız dosyayı presskit-viewer/data.json olarak repoya koyup deploy edin.';
+      saveBtn.textContent = '💾 Kaydedildi ✓';
+    } else {
+      hint.textContent = 'Önizlemeyi kontrol edin ve bu tarayıcıda kalıcı olması için "Kaydet"e basın. Sitenin TÜM ziyaretçilere aynı içeriği göstermesi için ayrıca "data.json indir" ile aldığınız dosyayı presskit-viewer/data.json olarak repoya koyup deploy edin.';
+      saveBtn.textContent = '💾 Kaydet';
+    }
+  }
 
   async function handleFile(file) {
     if (!file) return;
@@ -74,16 +123,27 @@
       if (!data || typeof data !== 'object' || Array.isArray(data)) {
         throw new Error('JSON bir obje olmalı.');
       }
-      localStorage.setItem('presskitData', JSON.stringify(data));
-      lastImported = data;
+      currentData = data;
+      isSaved = false;
       showResult(data);
-      setStatus('JSON içe aktarıldı ✓ — önizleme için "Görüntüle" linkine bakın.', 'ok');
+      updateSaveHint();
+      setStatus('JSON okundu — kaydetmek için "Kaydet"e basın.', null);
     } catch (e) {
       setStatus('İçe aktarma hatası: geçersiz JSON dosyası. (' + e.message + ')', 'err');
     }
   }
 
+  function saveCurrent() {
+    if (!currentData) return;
+    localStorage.setItem(DATA_KEY, JSON.stringify(currentData));
+    isSaved = true;
+    updateSaveHint();
+    setStatus('Kaydedildi ✓ — bu tarayıcıda kalıcı olarak saklanıyor.', 'ok');
+  }
+
   function init() {
+    initGate();
+
     const fileInput = document.getElementById('importFile');
     const dropZone = document.getElementById('dropZone');
 
@@ -110,20 +170,23 @@
       if (file) handleFile(file);
     });
 
+    document.getElementById('saveBtn').addEventListener('click', saveCurrent);
     document.getElementById('downloadDataBtn').addEventListener('click', () => {
-      if (lastImported) downloadDataJson(lastImported);
+      if (currentData) downloadDataJson(currentData);
     });
 
-    // If a previous import already exists in this browser, show it so re-visits aren't blank.
+    // If data was already saved in this browser, show it as the current (saved) state.
     try {
-      const existing = localStorage.getItem('presskitData');
+      const existing = localStorage.getItem(DATA_KEY);
       if (existing) {
         const data = JSON.parse(existing);
-        lastImported = data;
+        currentData = data;
+        isSaved = true;
         showResult(data);
-        setStatus('Bu tarayıcıda daha önce içe aktarılmış bir JSON bulundu.', null);
+        updateSaveHint();
+        setStatus('Bu tarayıcıda kaydedilmiş bir JSON bulundu.', null);
       }
-    } catch (e) { /* ignore */ }
+    } catch (e) { /* ignore corrupt localStorage */ }
   }
 
   init();

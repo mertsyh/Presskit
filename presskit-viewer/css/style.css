@@ -579,3 +579,35 @@ hr.sep { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
   border: 1px solid var(--border);
   background: var(--bg);
 }
+
+.auth-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(15, 16, 20, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.auth-gate.hide { display: none; }
+.auth-gate-box {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 32px;
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.auth-gate-box h2 { margin: 0 0 4px; font-size: 1.2rem; }
+.auth-gate-box input[type=password] {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 0.95rem;
+}
+.auth-gate-box .empty-note { margin: 0; min-height: 1.2em; color: var(--danger); font-style: normal; font-size: 0.85rem; }
