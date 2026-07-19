@@ -8,11 +8,21 @@
 </head>
 <body>
 
+<div class="auth-gate" id="authGate">
+  <form class="auth-gate-box" id="gateForm">
+    <h2>Admin Girişi</h2>
+    <input type="password" id="gatePassword" placeholder="Şifre" autocomplete="current-password" required>
+    <button type="submit" class="btn btn-primary">Giriş</button>
+    <p class="empty-note" id="gateError"></p>
+  </form>
+</div>
+
 <div class="topbar no-print">
   <div class="topbar-inner">
     <div class="brand">Press Kit Panel</div>
     <nav>
       <a href="/" target="_blank">Görüntüle ↗</a>
+      <button type="button" class="nav-link" id="lockBtn">Kilitle</button>
     </nav>
   </div>
 </div>

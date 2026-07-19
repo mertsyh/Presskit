@@ -15,6 +15,39 @@
   function val(id) { return document.getElementById(id).value; }
   function setVal(id, v) { document.getElementById(id).value = v || ''; }
 
+  // ---------- password gate (deterrent only, not real security on a static host) ----------
+  const ADMIN_PASSWORD_HASH = 'baebfe6318b532e2b86584a8e1882a0bc37c8dd964409094734f34fe21e638da';
+  const AUTH_KEY = 'presskitAdminAuthed';
+
+  async function sha256Hex(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function initGate() {
+    const gate = document.getElementById('authGate');
+    if (localStorage.getItem(AUTH_KEY) === '1') {
+      gate.classList.add('hide');
+    }
+    document.getElementById('gateForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const pw = document.getElementById('gatePassword').value;
+      const hash = await sha256Hex(pw);
+      if (hash === ADMIN_PASSWORD_HASH) {
+        localStorage.setItem(AUTH_KEY, '1');
+        gate.classList.add('hide');
+        document.getElementById('gateError').textContent = '';
+      } else {
+        document.getElementById('gateError').textContent = 'Yanlış şifre.';
+      }
+    });
+    document.getElementById('lockBtn').addEventListener('click', () => {
+      localStorage.removeItem(AUTH_KEY);
+      gate.classList.remove('hide');
+      document.getElementById('gatePassword').value = '';
+    });
+  }
+
   // ---------- status bar ----------
   let statusTimer;
   function setStatus(msg, type) {
@@ -684,6 +717,7 @@
   }
 
   async function init() {
+    initGate();
     initStaticHandlers();
     initGithubSettingsUI();
     try {
